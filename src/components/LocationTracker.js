@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const LocationTracker = () => {
   const [location, setLocation] = useState(null);
-  console.log("location", location);
   const mapContainerRef = useRef(null);
 
   const handleButtonClick = () => {
@@ -14,25 +14,11 @@ const LocationTracker = () => {
             lng: position.coords.longitude,
           };
           setLocation(userLocation);
-          console.log(userLocation);
 
-          // Update the map to show the user's current location
-          const mapOptions = {
-            center: userLocation,
-            zoom: 15, // You can adjust the zoom level as needed
-          };
+          // You can set the map center and zoom using the useRef and Leaflet map instance
+          mapContainerRef.current.setView(userLocation, 15);
 
-          const map = new window.google.maps.Map(
-            mapContainerRef.current,
-            mapOptions
-          );
-
-          // Add a marker for the user's current location
-          new window.google.maps.Marker({
-            position: userLocation,
-            map: map,
-            title: "Your Location",
-          });
+          // Note: You can also use setZoom to adjust the zoom level if needed
         },
         (error) => {
           console.error("Error getting user's location:", error);
@@ -52,15 +38,26 @@ const LocationTracker = () => {
         padding: "20px",
       }}
     >
-      <div
-        ref={mapContainerRef}
+      <MapContainer
+        center={[0, 0]} // Initial center (will be updated when user's location is available)
+        zoom={1} // Initial zoom level
         style={{
           height: "400px",
           width: "100%",
           marginBottom: "20px",
-          border: "1px solid #ccc",
         }}
-      />
+        ref={mapContainerRef}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {location && (
+          <Marker position={location}>
+            <Popup>Your Location</Popup>
+          </Marker>
+        )}
+      </MapContainer>
       <button
         style={{
           backgroundColor: "#4CAF50",
