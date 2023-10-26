@@ -44,11 +44,44 @@ const LocationTracker = () => {
   };
 
   return (
-    <div>
-      <div ref={mapContainerRef} style={{ height: "400px", width: "100%" }} />
-      <button onClick={handleButtonClick}>Get My Location</button>
-      <h1>latitude : {location.lat}</h1>
-      <h1>longitude : {location.lng}</h1>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "20px",
+      }}
+    >
+      <div
+        ref={mapContainerRef}
+        style={{
+          height: "400px",
+          width: "100%",
+          marginBottom: "20px",
+          border: "1px solid #ccc",
+        }}
+      />
+      <button
+        style={{
+          backgroundColor: "#4CAF50",
+          color: "white",
+          padding: "14px 20px",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+        onClick={handleButtonClick}
+      >
+        Get My Location
+      </button>
+      {location && (
+        <div style={{ marginTop: "20px" }}>
+          <h1 style={{ fontSize: "24px", marginBottom: "10px" }}>
+            Latitude: {location.lat}
+          </h1>
+          <h1 style={{ fontSize: "24px" }}>Longitude: {location.lng}</h1>
+        </div>
+      )}
     </div>
   );
 };
